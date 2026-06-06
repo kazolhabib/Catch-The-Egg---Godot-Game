@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bu2wu5a30wexu"]
+
+[ext_resource type="Texture2D" uid="uid://b1ob35by6abrh" path="res://Assets/Environment/branch.png" id="1_bmvvk"]
+[ext_resource type="Script" uid="uid://b58rtg515o4h6" path="res://Scripts/poop.gd" id="1_r4po0"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r4po0"]
+radius = 25.0
+
+[node name="Poop" type="Area2D" unique_id=1799458076 groups=["poop"]]
+z_index = 10
+script = ExtResource("1_r4po0")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=883878136]
+scale = Vector2(0.12, 0.12)
+texture = ExtResource("1_bmvvk")
+region_enabled = true
+region_rect = Rect2(1425, 80, 500, 580)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=778778051]
+shape = SubResource("CircleShape2D_r4po0")

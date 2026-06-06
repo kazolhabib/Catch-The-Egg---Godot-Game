@@ -1,0 +1,172 @@
+[gd_scene format=3 uid="uid://dijyga5l3ymas"]
+
+[ext_resource type="PackedScene" uid="uid://bslfr1ccanukf" path="res://Scenes/player.tscn" id="1_jjgbg"]
+[ext_resource type="PackedScene" uid="uid://b0pl7sdenlk7x" path="res://Scenes/bird.tscn" id="2_bo1nx"]
+[ext_resource type="Script" uid="uid://dmav8vl64lsxq" path="res://Scripts/game_manager.gd" id="3_8gbba"]
+[ext_resource type="PackedScene" uid="uid://bu2wu5a30wexu" path="res://Scenes/poop.tscn" id="4_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://njball7s0nj" path="res://Scenes/egg.tscn" id="4_kry3j"]
+[ext_resource type="Texture2D" uid="uid://054usbwbu54j" path="res://Assets/UI/ui_elements_sheet.png" id="6_6bp64"]
+[ext_resource type="Texture2D" uid="uid://dnyh3nvf0myv7" path="res://Assets/UI/logo.png" id="7_344ge"]
+[ext_resource type="FontFile" uid="uid://cg4w5ix2klhci" path="res://Assets/Fonts/LuckiestGuy-Regular.ttf" id="8_7x2bt"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jjgbg"]
+load_path = "res://.godot/imported/background.png-4bf11e7e8e08e193a400851a3f4abce7.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_bo1nx"]
+load_path = "res://.godot/imported/items_sprite_sheet.png-2879a6403498aa56f8c5c0085b9b0076.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ynf5e"]
+atlas = ExtResource("6_6bp64")
+region = Rect2(0, 0, 730, 439)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hptm8"]
+atlas = ExtResource("6_6bp64")
+region = Rect2(729, 0, 680, 408)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d1ilt"]
+atlas = ExtResource("6_6bp64")
+region = Rect2(0, 384, 445, 360)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6iyac"]
+atlas = ExtResource("6_6bp64")
+region = Rect2(360, 381, 397, 343)
+
+[node name="Main" type="Node2D" unique_id=549136113]
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1075923866]
+z_index = 10
+position = Vector2(640, 360)
+scale = Vector2(0.76, 0.76)
+texture = SubResource("CompressedTexture2D_jjgbg")
+
+[node name="Branch" type="Sprite2D" parent="." unique_id=149727830]
+z_index = 10
+position = Vector2(640, 152)
+scale = Vector2(0.3, 0.3)
+texture = SubResource("CompressedTexture2D_bo1nx")
+
+[node name="Player" parent="." unique_id=1068883582 instance=ExtResource("1_jjgbg")]
+z_index = 10
+position = Vector2(640, 580)
+scale = Vector2(1.2, 1.2)
+
+[node name="Bird1" parent="." unique_id=1300278570 instance=ExtResource("2_bo1nx")]
+z_index = 10
+position = Vector2(458, 96)
+scale = Vector2(0.85, 0.85)
+
+[node name="Bird2" parent="." unique_id=217867878 instance=ExtResource("2_bo1nx")]
+z_index = 10
+position = Vector2(585, 89)
+scale = Vector2(0.85, 0.85)
+
+[node name="Sprite2D" parent="Bird2" index="0" unique_id=1007801692]
+region_rect = Rect2(578, 0, 512, 560)
+
+[node name="Bird3" parent="." unique_id=1878380531 instance=ExtResource("2_bo1nx")]
+z_index = 10
+position = Vector2(716, 81)
+scale = Vector2(0.85, 0.85)
+
+[node name="Sprite2D" parent="Bird3" index="0" unique_id=1007801692]
+position = Vector2(0, 10)
+region_rect = Rect2(80, 560, 512, 558)
+
+[node name="Bird4" parent="." unique_id=797752783 instance=ExtResource("2_bo1nx")]
+z_index = 10
+position = Vector2(846, 72)
+scale = Vector2(0.85, 0.85)
+
+[node name="Sprite2D" parent="Bird4" index="0" unique_id=1007801692]
+position = Vector2(0, 10)
+region_rect = Rect2(580, 560, 512, 558)
+
+[node name="GameManager" type="Node" parent="." unique_id=1677413532]
+script = ExtResource("3_8gbba")
+egg_scene = ExtResource("4_kry3j")
+poop_scene = ExtResource("4_jjvhh")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1525412235]
+
+[node name="ScoreBoard" type="TextureRect" parent="UI" unique_id=900725710]
+offset_left = 8.0
+offset_top = -5.0
+offset_right = 298.0
+offset_bottom = 135.0
+texture = SubResource("AtlasTexture_ynf5e")
+expand_mode = 1
+
+[node name="ScoreLabel" type="Label" parent="UI" unique_id=230244551]
+offset_left = 8.0
+offset_top = -5.0
+offset_right = 288.0
+offset_bottom = 163.0
+theme_override_colors/font_color = Color(0.91159564, 0.76781297, 0, 1)
+theme_override_fonts/font = ExtResource("8_7x2bt")
+theme_override_font_sizes/font_size = 35
+text = "Score: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimerBoard" type="TextureRect" parent="UI" unique_id=464752014]
+offset_left = 1051.0
+offset_top = -16.0
+offset_right = 1251.0
+offset_bottom = 128.0
+texture = SubResource("AtlasTexture_hptm8")
+expand_mode = 1
+
+[node name="TimerLabel" type="Label" parent="UI" unique_id=1149343152]
+offset_left = 1095.0
+offset_top = 18.0
+offset_right = 1245.0
+offset_bottom = 138.0
+theme_override_colors/font_color = Color(1, 0.81165814, 0.3802526, 1)
+theme_override_fonts/font = ExtResource("8_7x2bt")
+theme_override_font_sizes/font_size = 35
+text = "60"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LogoImage" type="TextureRect" parent="UI" unique_id=933703157]
+offset_left = 406.0
+offset_top = 155.0
+offset_right = 906.0
+offset_bottom = 385.0
+texture = ExtResource("7_344ge")
+expand_mode = 1
+
+[node name="StartButton" type="TextureButton" parent="UI" unique_id=1120804349]
+offset_left = 580.0
+offset_top = 360.0
+offset_right = 720.0
+offset_bottom = 500.0
+texture_normal = SubResource("AtlasTexture_d1ilt")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="RestartButton" type="TextureButton" parent="UI" unique_id=541913220]
+visible = false
+offset_left = 582.0
+offset_top = 359.0
+offset_right = 722.0
+offset_bottom = 499.0
+texture_normal = SubResource("AtlasTexture_6iyac")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ResultLabel" type="Label" parent="UI" unique_id=899565719]
+offset_left = 405.0
+offset_top = 280.0
+offset_right = 905.0
+offset_bottom = 380.0
+theme_override_colors/font_color = Color(0.91159564, 0.76781297, 0, 1)
+theme_override_colors/font_outline_color = Color(0.21960784, 0.08235294, 0.01568628, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/font = ExtResource("8_7x2bt")
+theme_override_font_sizes/font_size = 54
+horizontal_alignment = 1
+
+[editable path="Bird2"]
+[editable path="Bird3"]
+[editable path="Bird4"]
