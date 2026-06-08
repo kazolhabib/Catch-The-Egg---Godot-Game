@@ -1,8 +1,10 @@
-[gd_scene format=3 uid="uid://b0pl7sdenlk7x"]
+[gd_scene load_steps=3 format=3 uid="uid://b0pl7sdenlk7x"]
 
 [ext_resource type="Texture2D" uid="uid://xn3ea2vwnki4" path="res://Assets/Characters/birds/birds_sprite_sheet.png" id="1_i8bdw"]
+[ext_resource type="Script" path="res://Scripts/bird.gd" id="2_tbywk"]
 
 [node name="Bird" type="Node2D" unique_id=1300278570]
+script = ExtResource("2_tbywk")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1007801692]
 scale = Vector2(0.3, 0.3)

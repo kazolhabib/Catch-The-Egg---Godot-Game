@@ -23,17 +23,37 @@ region = Rect2(836, 806, 418, 403)
 atlas = ExtResource("1_v0iea")
 region = Rect2(418, 0, 418, 403)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_gymyn"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(0, 0, 418, 418)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_3smsa"]
 atlas = ExtResource("1_v0iea")
 region = Rect2(836, 0, 418, 403)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pu2lt"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(0, 0, 418, 418)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8erm5"]
 atlas = ExtResource("1_v0iea")
 region = Rect2(0, 403, 418, 403)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ukyrk"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(0, 0, 418, 418)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_f1ek2"]
 atlas = ExtResource("1_v0iea")
 region = Rect2(418, 403, 418, 403)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7dp3o"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(0, 0, 418, 418)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h4iuc"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(0, 0, 418, 418)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tx1dd"]
 atlas = ExtResource("1_v0iea")
@@ -78,17 +98,38 @@ animations = [{
 "texture": SubResource("AtlasTexture_x3wgy")
 }, {
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_gymyn")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_3smsa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pu2lt")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8erm5")
 }, {
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_ukyrk")
+}, {
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_f1ek2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7dp3o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8erm5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h4iuc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3smsa")
 }],
 "loop": true,
 "name": &"run",
-"speed": 8.0
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -105,17 +146,20 @@ size = Vector2(93.5, 104)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cvnsp"]
 size = Vector2(68.5775, 32)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurt"]
+size = Vector2(112, 92)
+
 [node name="Player" type="CharacterBody2D" unique_id=1068883582]
 script = ExtResource("1_cvnsp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1682038619]
 scale = Vector2(0.45, 0.45)
 sprite_frames = SubResource("SpriteFrames_gymyn")
-animation = &"catch_egg"
+animation = &"run"
 autoplay = "run"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1801615985]
-position = Vector2(-164, -148)
+position = Vector2(-163, -148)
 shape = SubResource("RectangleShape2D_pu2lt")
 
 [node name="BasketArea" type="Area2D" parent="." unique_id=320190803]
@@ -124,3 +168,9 @@ position = Vector2(15, 20)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BasketArea" unique_id=1797892309]
 position = Vector2(-4.7112503, 4)
 shape = SubResource("RectangleShape2D_cvnsp")
+
+[node name="HurtArea" type="Area2D" parent="." unique_id=1240956828]
+position = Vector2(0, 24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtArea" unique_id=1913585976]
+shape = SubResource("RectangleShape2D_hurt")
