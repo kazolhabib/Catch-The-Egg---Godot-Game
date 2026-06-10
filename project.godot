@@ -13,7 +13,12 @@ config_version=5
 config/name="Catch The Eggs"
 run/main_scene="uid://dijyga5l3ymas"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://Assets/UI/app_icon.png"
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/show_image=true
+boot_splash/image="res://Assets/UI/splash_logo.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=true
 
 [display]
 
@@ -30,3 +35,4 @@ window/handheld/orientation=4
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+textures/vram_compression/import_etc2_astc=true

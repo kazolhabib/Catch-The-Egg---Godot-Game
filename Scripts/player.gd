@@ -31,6 +31,7 @@ var sprite_start_rotation: float
 var mobile_left_pressed: bool = false
 var mobile_right_pressed: bool = false
 var mobile_jump_requested: bool = false
+var mobile_jump_pressed: bool = false
 var run_motion_time: float = 0.0
 var vertical_velocity: float = 0.0
 
@@ -145,6 +146,7 @@ func reset_player():
 	mobile_left_pressed = false
 	mobile_right_pressed = false
 	mobile_jump_requested = false
+	mobile_jump_pressed = false
 	run_motion_time = 0.0
 	vertical_velocity = 0.0
 	velocity = Vector2.ZERO
@@ -189,6 +191,7 @@ func play_win_animation():
 	mobile_left_pressed = false
 	mobile_right_pressed = false
 	mobile_jump_requested = false
+	mobile_jump_pressed = false
 	animated_sprite.position = sprite_start_position
 	animated_sprite.rotation = sprite_start_rotation
 	velocity = Vector2.ZERO
@@ -201,6 +204,7 @@ func play_lose_animation():
 	mobile_left_pressed = false
 	mobile_right_pressed = false
 	mobile_jump_requested = false
+	mobile_jump_pressed = false
 	animated_sprite.position = sprite_start_position
 	animated_sprite.rotation = sprite_start_rotation
 	velocity = Vector2.ZERO
@@ -236,6 +240,15 @@ func should_jump() -> bool:
 	mobile_jump_requested = false
 	return jump_requested
 
+func set_mobile_controls(left_pressed: bool, right_pressed: bool, jump_pressed: bool):
+	mobile_left_pressed = left_pressed
+	mobile_right_pressed = right_pressed
+
+	if jump_pressed == true and mobile_jump_pressed == false:
+		mobile_jump_requested = true
+
+	mobile_jump_pressed = jump_pressed
+
 func is_on_jump_ground() -> bool:
 	return position.y >= ground_y - 0.5 and vertical_velocity >= 0.0
 
@@ -252,6 +265,7 @@ func get_hurt_by_bug():
 	mobile_left_pressed = false
 	mobile_right_pressed = false
 	mobile_jump_requested = false
+	mobile_jump_pressed = false
 	vertical_velocity = 0.0
 	velocity = Vector2.ZERO
 	position.y = ground_y

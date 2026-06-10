@@ -5,6 +5,9 @@ const SAFE_MARGIN := 28.0
 const PLAYER_EDGE_PADDING := 92.0
 const PLAYER_BOTTOM_OFFSET := 140.0
 const FLOOR_OFFSET_FROM_GROUND := 110.0
+const MAX_BIRD_BAND_WIDTH := 820.0
+const LEFT_BIRD_EXTRA_SHIFT := 42.0
+const TOUCH_HIT_PADDING := 46.0
 
 @onready var sky: Sprite2D = $Sky
 @onready var background: Sprite2D = $Background
@@ -26,6 +29,7 @@ const FLOOR_OFFSET_FROM_GROUND := 110.0
 @onready var jump_button: TextureButton = $UI/ControlPad/JumpButton
 
 var last_viewport_size := Vector2.ZERO
+var active_touch_zones: Dictionary = {}
 
 func _ready():
 	get_viewport().size_changed.connect(apply_responsive_layout)
@@ -79,11 +83,18 @@ func fit_sprite_to_cover(sprite: Sprite2D, viewport_size: Vector2):
 func layout_birds(viewport_size: Vector2):
 	var top_y: float = clamp(viewport_size.y * 0.15, 84.0, 130.0)
 	var usable_width: float = max(viewport_size.x - SAFE_MARGIN * 2.0, 1.0)
+	var bird_band_width: float = min(usable_width, clamp(viewport_size.x * 0.62, 560.0, MAX_BIRD_BAND_WIDTH))
+	var band_left: float = (viewport_size.x - bird_band_width) * 0.5
 
 	for index in birds.size():
 		var bird: Node2D = birds[index]
-		var spacing: float = usable_width / float(birds.size() + 1)
-		bird.position = Vector2(SAFE_MARGIN + spacing * float(index + 1), top_y + sin(float(index) * 1.7) * 8.0)
+		var spacing: float = bird_band_width / float(birds.size() + 1)
+		var bird_x: float = band_left + spacing * float(index + 1)
+
+		if index == 0:
+			bird_x -= min(LEFT_BIRD_EXTRA_SHIFT, max(band_left - SAFE_MARGIN, 0.0))
+
+		bird.position = Vector2(bird_x, top_y + sin(float(index) * 1.7) * 8.0)
 		bird.scale = Vector2.ONE * clamp(viewport_size.y / DESIGN_SIZE.y * 0.85, 0.72, 0.95)
 
 func layout_ui(viewport_size: Vector2):
@@ -109,8 +120,8 @@ func layout_ui(viewport_size: Vector2):
 	var logo_size := Vector2(logo_width, logo_width * 0.46)
 	place_control(logo_image, Vector2((viewport_size.x - logo_size.x) * 0.5, viewport_size.y * 0.2), logo_size)
 
-	var action_size: Vector2 = Vector2.ONE * clamp(viewport_size.y * 0.19, 118.0, 146.0)
-	var action_pos := Vector2((viewport_size.x - action_size.x) * 0.5, viewport_size.y * 0.51)
+	var action_size: Vector2 = Vector2.ONE * clamp(viewport_size.y * 0.25, 170.0, 220.0)
+	var action_pos := Vector2((viewport_size.x - action_size.x) * 0.5, viewport_size.y * 0.50)
 	place_button(start_button, action_pos, action_size, 0.0)
 	place_button(restart_button, action_pos, action_size, 0.0)
 
@@ -118,14 +129,90 @@ func layout_ui(viewport_size: Vector2):
 	place_control(result_label, Vector2((viewport_size.x - result_size.x) * 0.5, viewport_size.y * 0.34), result_size)
 	result_label.add_theme_font_size_override("font_size", int(clamp(viewport_size.x * 0.038, 34.0, 52.0)))
 
-	var move_size: Vector2 = Vector2.ONE * clamp(viewport_size.y * 0.17, 96.0, 124.0)
-	var move_gap: float = clamp(viewport_size.x * 0.02, 18.0, 30.0)
+	var move_size: Vector2 = Vector2.ONE * clamp(viewport_size.y * 0.25, 170.0, 230.0)
+	var move_gap: float = clamp(viewport_size.x * 0.024, 28.0, 44.0)
 	var move_y: float = viewport_size.y - safe.y - move_size.y
 	place_button(left_button, Vector2(safe.x + 12.0, move_y), move_size, PI)
 	place_button(right_button, Vector2(safe.x + 12.0 + move_size.x + move_gap, move_y), move_size, 0.0)
 
-	var jump_size: Vector2 = Vector2.ONE * clamp(viewport_size.y * 0.19, 112.0, 140.0)
+	var jump_size: Vector2 = Vector2.ONE * clamp(viewport_size.y * 0.30, 210.0, 280.0)
 	place_button(jump_button, Vector2(viewport_size.x - safe.x - jump_size.x - 12.0, viewport_size.y - safe.y - jump_size.y), jump_size, -PI * 0.5)
+
+func _input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed == true:
+			active_touch_zones[event.index] = get_touch_zone(event.position)
+		else:
+			active_touch_zones.erase(event.index)
+
+		update_player_mobile_controls()
+	elif event is InputEventScreenDrag:
+		active_touch_zones[event.index] = get_touch_zone(event.position)
+		update_player_mobile_controls()
+
+func get_touch_zone(screen_position: Vector2) -> String:
+	if control_pad.visible == false:
+		return ""
+
+	var zone: String = get_button_zone(screen_position)
+
+	if zone != "":
+		return zone
+
+	return get_fallback_touch_zone(screen_position)
+
+func get_button_zone(screen_position: Vector2) -> String:
+	if get_button_hit_rect(left_button).has_point(screen_position) == true:
+		return "left"
+
+	if get_button_hit_rect(right_button).has_point(screen_position) == true:
+		return "right"
+
+	if get_button_hit_rect(jump_button).has_point(screen_position) == true:
+		return "jump"
+
+	return ""
+
+func get_button_hit_rect(button: TextureButton) -> Rect2:
+	return Rect2(button.position, button.size).grow(TOUCH_HIT_PADDING)
+
+func get_fallback_touch_zone(screen_position: Vector2) -> String:
+	var viewport_size := last_viewport_size
+
+	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
+		viewport_size = get_viewport_rect().size
+
+	if screen_position.y < viewport_size.y * 0.58:
+		return ""
+
+	if screen_position.x <= viewport_size.x * 0.20:
+		return "left"
+
+	if screen_position.x <= viewport_size.x * 0.42:
+		return "right"
+
+	if screen_position.x >= viewport_size.x * 0.66:
+		return "jump"
+
+	return ""
+
+func update_player_mobile_controls():
+	if player == null or player.has_method("set_mobile_controls") == false:
+		return
+
+	var left_pressed := false
+	var right_pressed := false
+	var jump_pressed := false
+
+	for zone in active_touch_zones.values():
+		if zone == "left":
+			left_pressed = true
+		elif zone == "right":
+			right_pressed = true
+		elif zone == "jump":
+			jump_pressed = true
+
+	player.set_mobile_controls(left_pressed, right_pressed, jump_pressed)
 
 func place_control(control: Control, top_left: Vector2, size: Vector2):
 	control.set_anchors_preset(Control.PRESET_TOP_LEFT)

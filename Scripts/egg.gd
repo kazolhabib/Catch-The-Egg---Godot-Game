@@ -65,7 +65,7 @@ func break_on_floor():
 	if player != null and player.has_method("add_score"):
 		player.add_score(-1)
 
-	play_sound("egg_break", 1.0)
+	play_sound("egg_break", 5.0, randf_range(0.96, 1.08))
 	position.y = floor_y
 	rotation = 0.0
 	scale = Vector2.ONE

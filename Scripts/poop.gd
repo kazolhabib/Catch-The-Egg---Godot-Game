@@ -7,6 +7,7 @@ extends Area2D
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
+var golden_glow: Sprite2D
 var start_x: float
 var fall_time: float = 0.0
 var sway_offset: float
@@ -41,11 +42,32 @@ func _process(delta):
 func apply_item_kind():
 	if item_kind == "golden":
 		add_to_group("golden_poop")
-		sprite.modulate = Color(1.35, 0.95, 0.25, 1.0)
-		sprite.scale = Vector2(0.135, 0.135)
+		sprite.modulate = Color(1.55, 1.10, 0.16, 1.0)
+		sprite.scale = Vector2(0.145, 0.145)
+		add_golden_glow()
 	else:
 		sprite.modulate = Color(1, 1, 1, 1)
 		sprite.scale = Vector2(0.12, 0.12)
+		remove_golden_glow()
+
+func add_golden_glow():
+	if golden_glow != null:
+		return
+
+	golden_glow = Sprite2D.new()
+	golden_glow.texture = sprite.texture
+	golden_glow.region_enabled = sprite.region_enabled
+	golden_glow.region_rect = sprite.region_rect
+	golden_glow.centered = sprite.centered
+	golden_glow.scale = Vector2(0.18, 0.18)
+	golden_glow.modulate = Color(1.0, 0.78, 0.14, 0.42)
+	golden_glow.z_index = sprite.z_index - 1
+	add_child(golden_glow)
+
+func remove_golden_glow():
+	if golden_glow != null:
+		golden_glow.queue_free()
+		golden_glow = null
 
 func is_instant_game_over() -> bool:
 	return item_kind == "golden"
@@ -57,11 +79,12 @@ func splat_on_floor():
 	remove_from_group("poop")
 	remove_from_group("golden_poop")
 
-	play_sound("poop_splat", 1.0)
+	play_sound("poop_splat", 6.0, randf_range(0.92, 1.08))
 	position.y = floor_y
 	rotation = 0.0
 	scale = Vector2.ONE
 	sprite.visible = false
+	remove_golden_glow()
 
 	var splat_pieces := create_splat_pieces()
 	var tween := create_tween()
@@ -134,7 +157,8 @@ func get_splat_scale(index: int) -> Vector2:
 
 func get_splat_color(index: int) -> Color:
 	if item_kind == "golden":
-		return Color(1.35, 0.95, 0.25, 1.0)
+		var shimmer := 1.0 - float(index % 3) * 0.10
+		return Color(1.55 * shimmer, 1.02 * shimmer, 0.10, 1.0)
 
 	var shade := 1.0 - float(index % 3) * 0.08
 	return Color(0.34 * shade, 0.18 * shade, 0.08 * shade, 1.0)
