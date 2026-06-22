@@ -72,5 +72,15 @@ def create_feature_graphic() -> Path:
     return out_path
 
 
+def create_app_icon() -> Path:
+    icon = Image.open(ROOT / "Assets" / "UI" / "app_icon.png").convert("RGBA")
+    icon = icon.resize((512, 512), Image.LANCZOS)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    out_path = OUT_DIR / "app-icon-512.png"
+    icon.save(out_path, "PNG", optimize=True)
+    return out_path
+
+
 if __name__ == "__main__":
     print(create_feature_graphic())
+    print(create_app_icon())

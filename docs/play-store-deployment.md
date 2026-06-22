@@ -64,7 +64,7 @@ Use these as a starting point, then confirm inside Play Console before submittin
 - Feature graphic: `store-assets/feature-graphic-1024x500.png`
 - Phone screenshots: at least 2 gameplay screenshots
 - Tablet screenshots: recommended if supporting tablets
-- Privacy policy URL: may be required depending on Play Console declarations and target audience
+- Privacy policy URL: publish `docs/privacy-policy.html` with GitHub Pages and use that public URL in Play Console
 
 Regenerate store assets:
 
