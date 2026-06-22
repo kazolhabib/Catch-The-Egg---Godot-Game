@@ -62,6 +62,8 @@ The project includes an Android Play Store export preset in `export_presets.cfg`
 
 For direct testing, use the APK linked above. For store publishing, export a signed `.aab` from Godot.
 
+See [docs/play-store-deployment.md](docs/play-store-deployment.md) for the Play Store checklist, listing draft, and release notes.
+
 ## Project Structure
 
 ```text
@@ -74,4 +76,3 @@ releases/    Downloadable Android APK builds
 ## Screenshots
 
 Screenshots will be added with the next visual release pass.
-
